@@ -157,19 +157,76 @@ function addBook(e){
 
 // Deleting a book
 function deleteBook(index){
+    let inputVal = document.getElementById("searchTxt").value.toLowerCase();
+    let booksObj = [];
     let booksData = localStorage.getItem("booksData");
-    if (booksData == null){
-        booksObj = [];
+    let trs = document.querySelectorAll("#tableBody tr");
+    let y = trs[index];
+    let z = y.innerHTML;
+    let arr = z.split("</td>");
+    let ind = 0;
+    if (inputVal.trim() == ""){
+        let arr1 = [arr[0].slice(37), arr[1].slice(37), arr[2].slice(37)];
+        if (booksData == null){
+            booksObj = [];
+        }
+        else{
+            booksObj = JSON.parse(booksData);
+        }
+        for (let i=0; i<booksObj.length; i++){
+            let count = 0;
+            for(let j=0; j<3; j++){
+                if (booksObj[i][j] == arr1[j]){
+                    count += 1;
+                    if (count == 2){
+                        console.log("true: " + i);
+                        ind = i;
+                    }
+                }
+                else{
+                    console.log("false");
+                    break;
+                }
+            }
+        }
+        // console.log(booksObj[ind]);
     }
     else{
-        booksObj = JSON.parse(booksData);
+        let arr1 = [arr[0].slice(33), arr[1].slice(33), arr[2].slice(33)];
+        if (booksData == null){
+            booksObj = [];
+        }
+        else{
+            booksObj = JSON.parse(booksData);
+        }
+        for (let i=0; i<booksObj.length; i++){
+            let count = 0
+            for(let j=0; j<3; j++){
+                if (booksObj[i][j] == arr1[j]){
+                    count ++;
+                    if (count == 2){
+                        console.log("true: " + i);
+                        ind = i;
+                    }
+                }
+                else{
+                    console.log("false");
+                    break;
+                }
+            }
+        }
     }
-
-    booksObj.splice(index, 1);
+    console.log(ind);
+    console.log(booksObj[ind]);
+    booksObj.splice(ind, 1);
     localStorage.setItem("booksData", JSON.stringify(booksObj));
+    document.getElementById("searchTxt").value = "";
+    display.showMessage('success', 'Your book has been successfully deleted');
     display.showData();
 }
-
+    // booksObj.splice(index, 1);
+    // localStorage.setItem("booksData", JSON.stringify(booksObj));
+    // display.showData();
 // Searching for a book
 let search = document.getElementById("searchTxt");
 let searchBtn = document.getElementById("searchBtn")
